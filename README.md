@@ -17,3 +17,8 @@ Proyek ini adalah sistem **Lampu Otomatis** menggunakan sensor gerak (PIR), modu
 2. Sensor Gerak PIR (Pin D6)
 3. Modul Relay Actuve Low (Pin D5)
 4. Modul RTC DS3231 (Pin I2C: D1 SCL, D2 SDA)
+
+
+## Credits
+- Project Developer: Edi
+- AI Assistance: ChatGPT (OpenAI), Google Gemini
