@@ -1,7 +1,10 @@
 # Lampu Otomatis Cerdas Berbasis Gerakan
 
 Proyek ini adalah sistem **Lampu Otomatis** menggunakan sensor gerak (PIR), modul RTC, dan mikrokontroler (ESP8266). Lampu akan otomatis menyala jika mendeteksi gerakan seseorang yang lewat, khususnya pada waktu malam hari. Proyek ini didesain sebagai solusi penerangan pintar (bukan sistem keamanan), agar lampu menyala sendiri saat dibutuhkan.
-
+## Simulation
+<p align="center">
+  <img src="[https://github.com/ediiloupatty/Smart-Automatic-Lighting-with-Motion-Detection/blob/main/img/smart-light.png](https://github.com/ediiloupatty/Smart-Automatic-Lighting-with-Motion-Detection/blob/main/img/Create%20With%20Gemini%20Veo.gif)" alt="Diagram Blok">
+</p>
 ## Diagram Blok
 <p align="center">
   <img src="https://github.com/ediiloupatty/Smart-Automatic-Lighting-with-Motion-Detection/blob/main/img/smart-light.png" alt="Diagram Blok">
