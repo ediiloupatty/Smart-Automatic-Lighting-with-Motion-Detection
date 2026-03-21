@@ -30,9 +30,16 @@ bool rtcValid        = false;
 // VARIABEL TIMER (ANTI-NOISE & WARMUP)
 // ==========================================
 unsigned long lastMotionTime = 0;
+unsigned long motionStartTime = 0; // Waktu awal gerakan terdeteksi
 const unsigned long HOLD_TIME = 5000;    // Relay ditahan 5 detik setelah gerakan hilang
 const unsigned long WARMUP_TIME = 20000; // Sensor PIR butuh 20 detik kalibrasi saat pertama nyala
+
+// Filter Anti-Sensitif: Gerakan wajib terdeteksi minim 1.5 detik agar menyala (bukan kilat/noise)
+const unsigned long TRIGGER_DELAY = 1500; 
+
 bool isMotionActive = false;
+bool isDetecting = false; // Status konfirmasi gerakan
+
 
 // ==========================================
 // DEKLARASI FUNGSI-FUNGSI UTAMA (MODULAR)
@@ -62,9 +69,18 @@ void updateMotionStatus() {
   int currentMotion = digitalRead(PIR_PIN);
 
   if (currentMotion == HIGH) {
-    isMotionActive = true;
-    lastMotionTime = millis();
+    if (!isDetecting) { // Deteksi awal
+      isDetecting = true;
+      motionStartTime = millis(); 
+    } else {
+      // Nyalakan lampu HANYA JIKA gerakan bertahan selama TRIGGER_DELAY
+      if (millis() - motionStartTime >= TRIGGER_DELAY) {
+        isMotionActive = true;
+        lastMotionTime = millis();
+      }
+    }
   } else {
+    isDetecting = false; // Langsung dibatalkan jika putus di tengah jalan
     if (millis() - lastMotionTime > HOLD_TIME) {
       isMotionActive = false;
     }
