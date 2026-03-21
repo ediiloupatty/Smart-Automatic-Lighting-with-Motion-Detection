@@ -14,7 +14,10 @@ Proyek ini adalah sistem **Lampu Otomatis** menggunakan sensor gerak (PIR), modu
 
 ## Fitur Utama
 - **Sensor Gerakan:** Menggunakan sensor PIR untuk mendeteksi pergerakan dan menyalakan lampu.
-- **Deteksi Waktu:** Menggunakan RTC DS3231. Lampu akan aktif merespons gerakan hanya di malam hari (17:00 - 04:59). Pada siang hari (05:00 - 16:59), sistem masuk ke mode standby dan lampu otomatis mati.
+- **Deteksi Waktu:** Menggunakan RTC DS3231 dengan 3 mode operasi otomatis:
+  1. **Mode Aktif (18:00 - 21:59):** Lampu menyala secara terus-menerus (mengabaikan sensor).
+  2. **Mode Sensor Tengah Malam (22:00 - 05:59):** Sistem sensor aktif, lampu hanya menyala jika terdeteksi pergerakan di dekatnya.
+  3. **Mode Siang (06:00 - 17:59):** Sistem *standby* (lampu akan ikut mati total).
 - **Web Dashboard:** Antarmuka web lokal untuk memantau status gerakan, jam saat ini, dan status Relay. Juga tersedia API dalam format JSON.
 
 ## Komponen Hardware
