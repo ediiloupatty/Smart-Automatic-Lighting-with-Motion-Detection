@@ -96,15 +96,23 @@ void updateRelayState() {
   }
 
   // ===============================
-  // MODE MALAM (17:00 - 04:59) Atau Fail-Safe jika RTC Error
+  // MODE AKTIF (18:00 - 21:59) -> Lampu Nyala Terus
   // ===============================
-  if (!rtcValid || jamSaatIni >= 17 || jamSaatIni < 5) {
-    statusSistem = "Mode Malam (Keamanan Aktif)";
+  if (rtcValid && jamSaatIni >= 18 && jamSaatIni < 22) {
+    statusSistem = "Mode Malam (Lampu Nyala Terus)";
+    statusGerakan = "Diabaikan (Lampu Sedang Nyala)";
+    digitalWrite(RELAY_PIN, HIGH);   // Relay ON
+  }
+  // ===============================
+  // MODE SENSOR (22:00 - 05:59) Atau Fail-Safe jika RTC Error
+  // ===============================
+  else if (!rtcValid || jamSaatIni >= 22 || jamSaatIni < 6) {
+    statusSistem = "Mode Tengah Malam (Sensor Aktif)";
 
     if (millis() >= WARMUP_TIME) {
       if (isMotionActive) {
         statusGerakan = "TERDETEKSI!"; // Menggunakan string ini agar di web warnanya merah (sesuai handleRoot)
-        digitalWrite(RELAY_PIN, HIGH);   // Relay ON (Active Low)
+        digitalWrite(RELAY_PIN, HIGH);   // Relay ON
       } else {
         statusGerakan = "Aman";
         digitalWrite(RELAY_PIN, LOW);  // Relay OFF
@@ -112,10 +120,10 @@ void updateRelayState() {
     }
   }
   // ===============================
-  // MODE SIANG (05:00 - 16:59)
+  // MODE SIANG (06:00 - 17:59)
   // ===============================
   else {
-    statusSistem = "Mode Siang (Standby)";
+    statusSistem = "Mode Siang (Mati Total)";
 
     if (millis() >= WARMUP_TIME) {
       if (isMotionActive) {
@@ -144,10 +152,14 @@ void handleRoot() {
     html += "<h2>Jam Sistem: <span style='color:#00e676;'>" + String(timeBuffer) + "</span></h2>";
   }
 
-  if (statusSistem == "Mode Siang (Standby)") {
+  if (statusSistem == "Mode Siang (Mati Total)") {
     html += "<h3 style='color:#ffbb33;'>Status: " + statusSistem + "</h3>";
     html += "<div class='box' style='background:#424242;'>SENSOR: " + statusGerakan + "</div>";
     html += "<p style='color:#9e9e9e;'>Lampu Relay: MATI (Dinonaktifkan)</p>";
+  } else if (statusSistem == "Mode Malam (Lampu Nyala Terus)") {
+    html += "<h3 style='color:#ffbb33;'>Status: " + statusSistem + "</h3>";
+    html += "<div class='box' style='background:#ffbb33; color:#000;'>SENSOR: " + statusGerakan + "</div>";
+    html += "<p style='color:#ffbb33; font-weight:bold;'>Lampu Relay: MENYALA TERUS</p>";
   } else {
     html += "<h3 style='color:#33b5e5;'>Status: " + statusSistem + "</h3>";
     
